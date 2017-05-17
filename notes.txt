@@ -1,1 +1,10 @@
 Basic idea is a simple program to demonstrate use of linenoise to autocomplete a directory navigator
+
+Output: current working directory
+prompt: command>
+
+commands:
+  pwd
+  cd
+
+With auto complete
