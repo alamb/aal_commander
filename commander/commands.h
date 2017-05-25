@@ -17,11 +17,16 @@ class Commands
 public:
   Commands(std::vector<std::unique_ptr<Command>> &&commands);
 
+  Commands() = default;
+  void add_command(std::unique_ptr<Command> &&command);
+
+
   std::string              run_command(const Parsed_line &line);
+  // throws exception if no known command
   Command&                 get_command(const Parsed_line &line);
   std::vector<std::string> get_possible_completions(const Parsed_line &line);
 
 private:
-  const std::vector<std::unique_ptr<Command>> commands_;
+  std::vector<std::unique_ptr<Command>> commands_;
 };
 

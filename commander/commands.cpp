@@ -15,6 +15,12 @@ Commands::Commands(std::vector<std::unique_ptr<Command>> &&commands) :
 {
 }
 
+void Commands::add_command(std::unique_ptr<Command> &&command)
+{
+    commands_.emplace_back(std::move(command));
+}
+
+
 std::string Commands::run_command(const Parsed_line &line)
 {
     return get_command(line.command()).execute(line.args());
