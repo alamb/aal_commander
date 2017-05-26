@@ -1,8 +1,7 @@
 #include "gtest/gtest.h"
-#include "parsed_line.h"
-#include "hints.h"
-
-typedef std::vector<std::string> strvec;
+#include "commander/parsed_line.h"
+#include "commander/hints.h"
+#include "test_utils.h"
 
 TEST(test_hints, no_completions)
 {

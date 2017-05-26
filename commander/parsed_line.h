@@ -9,6 +9,7 @@
 class Parsed_line
 {
 public:
+    Parsed_line();
     Parsed_line(const std::string &s);
     std::string dump() const;
 

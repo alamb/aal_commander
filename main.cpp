@@ -1,9 +1,9 @@
-#include "view_state.h"
-#include "linenoise.h"
-#include "command.h"
-#include "commands.h"
-#include "hints.h"
-#include "parsed_line.h"
+#include "commander/view_state.h"
+#include "commander/linenoise.h"
+#include "commander/command.h"
+#include "commander/commands.h"
+#include "commander/hints.h"
+#include "commander/parsed_line.h"
 
 #include <memory>
 #include <string>

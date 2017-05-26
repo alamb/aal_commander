@@ -1,6 +1,9 @@
 #include "gtest/gtest.h"
 #include <string>
 
+typedef std::vector<std::string> strvec;
+
+
 #define EXPECT_THROW_WITH_MESSAGE(__statement, __message)\
 try { (__statement);\
       FAIL() << "Expected exception with message " << (__message)\

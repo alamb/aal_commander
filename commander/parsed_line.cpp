@@ -1,6 +1,11 @@
 #include "parsed_line.h"
 #include <sstream>
 
+Parsed_line::Parsed_line()
+{
+}
+
+
 Parsed_line::Parsed_line(const std::string &s)
 {
     std::istringstream iss(s);
@@ -45,3 +50,4 @@ std::string Parsed_line::remove_command(const std::string &s) const
 
     return s.substr(idx);
 }
+

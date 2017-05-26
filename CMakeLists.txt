@@ -17,15 +17,15 @@ find_package(Boost 1.45.0 COMPONENTS filesystem)
 
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall")
 
-add_subdirectory (commander) 
-include_directories ("${PROJECT_SOURCE_DIR}/commander")
+include_directories ("${PROJECT_SOURCE_DIR}")
 
+add_subdirectory (commander) 
 add_executable (aal main.cpp)
 target_link_libraries(aal commander ${Boost_LIBRARIES} )
 
 # Unit tests (gtest based)
 add_subdirectory (googletest) 
-include_directories ("${PROJECT_SOURCE_DIR}/googletest/include")
+include_directories (SYSTEM "${PROJECT_SOURCE_DIR}/googletest/include")
 
 FILE(GLOB test_sources tests/*.cpp )
 add_executable (aal_test aal_test.cpp ${test_sources})

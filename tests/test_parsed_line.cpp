@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "parsed_line.h"
+#include "commander/parsed_line.h"
 
 TEST(test_parsed_line, construct)
 {
