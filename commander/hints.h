@@ -12,11 +12,11 @@ public:
     Hints();
 
     // create the expected hints from a set of possibilities
-    Hints(Parsed_line &line, const std::vector<std::string> &possibilities);    
+    Hints(const Parsed_line &line, const std::vector<std::string> &possibilities);    
 
-    static const int COLOR_MAGENTA = 35;
-    static const int COLOR_RED     = 31;
-    static const int COLOR_GREEN   = 32;
+    static const int COLOR_MAGENTA;
+    static const int COLOR_RED;
+    static const int COLOR_GREEN;
 
     // access
     int  color()                   const { return color_; }

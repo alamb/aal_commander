@@ -9,4 +9,3 @@ try { (__statement);\
     EXPECT_EQ(std::string(__message), std::string(e.what())) << "unexpected message on thrown exception.";\
 }
 
-

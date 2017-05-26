@@ -5,19 +5,7 @@
 #include "view_state.h"
 
 #include "test_utils.h"
-
-class Dummy_command : public Command
-{
-    public: 
-        Dummy_command(const std::string &id, View_state &state) :
-            Command(id, state) {}
-
-    std::string execute(const std::vector<std::string> &args) override
-    {
-        return "Ran command " + command_id();
-    }
-
-};
+#include "dummy_command.h"
 
 class test_commands : public ::testing::Test 
 {
@@ -37,5 +25,4 @@ TEST_F(test_commands, get_command)
 
     p = Parsed_line("ccd");
     EXPECT_THROW_WITH_MESSAGE(commands.get_command(p), "Unknown command ccd");
-
 }

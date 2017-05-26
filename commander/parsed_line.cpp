@@ -33,7 +33,7 @@ std::string Parsed_line::dump() const
     return ss.str();
 }
 
-std::string Parsed_line::remove_command(const std::string &s)
+std::string Parsed_line::remove_command(const std::string &s) const
 {
     size_t idx = 0;
     while (idx < s.size() && idx < command_.size() && s[idx] == command_[idx])
