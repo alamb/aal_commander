@@ -14,7 +14,7 @@ public:
     std::string dump() const;
 
     // remove as much of s is left after removing command_
-    std::string remove_command(const std::string &s) const;
+    std::string remove_command_and_args(const std::string &s) const;
 
     const std::string              &command() const { return command_; }
     const std::vector<std::string> &args()    const { return args_;    }

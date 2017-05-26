@@ -23,7 +23,7 @@ Hints::Hints(const Parsed_line &line, const std::vector<std::string> &completion
     }
     else if (completions.size() == 1)
     {
-        hint_text_ = line.remove_command(completions[0]);
+        hint_text_ = line.remove_command_and_args(completions[0]);
         color_ = COLOR_GREEN;
     }
     else
