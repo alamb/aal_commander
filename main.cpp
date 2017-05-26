@@ -1,7 +1,8 @@
 #include "commander/view_state.h"
 #include "commander/linenoise.h"
-#include "commander/command.h"
+#include "commander/command_registry.h"
 #include "commander/commands.h"
+#include "commander/command.h"
 #include "commander/hints.h"
 #include "commander/parsed_line.h"
 
@@ -15,7 +16,7 @@
 // could thread through a user data or thread local
 //  if this really irks someone in the future
 static View_state   g_state;
-static Commands     g_commands(Command::get_commands(g_state));
+static Commands     g_commands(Command_registry::get_commands(g_state));
 
 // memory management for prompt/hints
 Hints g_hints;

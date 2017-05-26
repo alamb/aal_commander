@@ -35,7 +35,7 @@ TEST_F(test_commands, get_possible_completions)
 
     Parsed_line p;
     p = Parsed_line("");
-    EXPECT_EQ(strvec({"pwd", "cd"}), commands.get_possible_completions(p));
+    EXPECT_EQ(strvec({"cd", "pwd"}), commands.get_possible_completions(p));
 
     p = Parsed_line("p");
     EXPECT_EQ(strvec({"pwd"}), commands.get_possible_completions(p));

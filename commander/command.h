@@ -20,9 +20,6 @@ public:
     // throws exception on error
     virtual std::string execute(const std::vector<std::string> &args) = 0;
 
-    // available commands
-    static std::vector<std::unique_ptr<Command> > get_commands(View_state &state);
-
 protected:
     Command(const std::string &id, View_state &state) : 
         command_id_(id), state_(state) {}
