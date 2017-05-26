@@ -1,6 +1,8 @@
 #include "hints.h"
 #include "parsed_line.h"
 
+#include <algorithm>
+
 const int Hints::COLOR_MAGENTA = 35;
 const int Hints::COLOR_RED     = 31;
 const int Hints::COLOR_GREEN   = 32;
@@ -26,15 +28,42 @@ Hints::Hints(const Parsed_line &line, const std::vector<std::string> &completion
     }
     else
     {
-        std::stringstream ss;
-        
-        // todo: cap length of suggestions/ prune common stems, etc
+        // find longest common prefix between all completions
+        std::string common_prefix = completions[0];
         for (const std::string &s : completions) 
+        {
+            size_t len = 0;
+            while (len < s.size() &&  len < common_prefix.size() && 
+                   common_prefix[len] == s[len]) 
+            {
+                len++;
+            }
+            common_prefix = common_prefix.substr(0,len);
+        }
+
+        // create a sorted list of remaining completions (sorted by shortest to longest)
+        std::vector<std::string> remainders;
+        for (const std::string &s : completions)
+        {
+            remainders.emplace_back(s.substr(common_prefix.size()));
+        }
+        std::sort(remainders.begin(), 
+                 remainders.end(), 
+                 [](const auto &s1, const auto &s2) {
+                     return s1.size() < s2.size(); 
+                 });
+
+        std::stringstream ss;
+        ss << "{";
+        bool first = true;
+        for (const std::string &s : remainders) 
         { 
-            if (!ss.str().empty()) { ss << ", "; }
+            if (!first) { ss << ","; }
+            first = false;
             ss << s;
         }
-        hint_text_ = " [Available: " + ss.str() + "]";
+        ss << "}";
+        hint_text_ = ss.str();
         color_ = COLOR_MAGENTA;
     }
 }
