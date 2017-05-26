@@ -31,7 +31,21 @@ std::vector<std::string> View_state::get_directories() const
         }
     }
     return dirs;
+}
 
+std::vector<std::string> View_state::get_directory_listing() const
+{
+    std::vector<std::string> ret;
+    for (fs::directory_iterator itr(*cwd_); itr != fs::directory_iterator(); ++itr)
+    {
+        fs::path ent = itr->path();
+        std::string d_string = fs::is_directory(ent) ? "(d) " : "(f) ";
+        {
+            ret.push_back(d_string + ent.filename().string());
+        }
+    }
+    return ret;
+    
 }
 
 

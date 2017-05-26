@@ -21,6 +21,9 @@ public:
     // return all subdirectories of the current working directory
     std::vector<std::string> get_directories() const;
 
+    // lists the contents of the  current working directory
+    std::vector<std::string> get_directory_listing() const;
+
     bool exit_requested() const { return exit_requested_; }
     void set_exit_requested()   { exit_requested_ = true; }
 
