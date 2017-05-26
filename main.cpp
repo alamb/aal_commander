@@ -24,8 +24,8 @@ Hints g_hints;
 static void completion_shim(const char *buf, linenoiseCompletions *lc)
 {
     Parsed_line line(buf);
-
-    for (const std::string &s : g_commands.get_possible_completions(line))
+    
+    for (const std::string &s : g_commands.get_collapsed_completions(line))
     {
         linenoiseAddCompletion(lc, s.c_str());
     }

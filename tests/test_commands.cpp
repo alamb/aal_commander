@@ -46,3 +46,44 @@ TEST_F(test_commands, get_possible_completions)
     p = Parsed_line("pwd");
     EXPECT_EQ(strvec({"pwd"}), commands.get_possible_completions(p));
 }
+
+TEST_F(test_commands, collapse_completions_no_common)
+{
+    EXPECT_EQ(strvec({}), 
+              Commands::collapse_completions(strvec({})));
+    EXPECT_EQ(strvec({"def"}), 
+              Commands::collapse_completions(strvec({"def"})));
+    EXPECT_EQ(strvec({"abc", "def"}), 
+              Commands::collapse_completions(strvec({"def", "abc"})));
+    EXPECT_EQ(strvec({"abc", "def"}), 
+              Commands::collapse_completions(strvec({"abc", "def"})));
+}
+
+TEST_F(test_commands, collapse_completions_prefix)
+{
+    EXPECT_EQ(strvec({"abc", "def"}), 
+              Commands::collapse_completions(strvec({"def", "abc", "abc"})));
+
+    EXPECT_EQ(strvec({"abc", "def"}), 
+              Commands::collapse_completions(strvec({"def", "abc", "abcd"})));
+
+    EXPECT_EQ(strvec({"abc", "def"}), 
+              Commands::collapse_completions(strvec({"abc", "def", "abcd"})));
+
+    EXPECT_EQ(strvec({"abc", "def"}), 
+              Commands::collapse_completions(strvec({"def", "abc", "abcd", "abc"})));
+
+    EXPECT_EQ(strvec({"ab", "def"}), 
+              Commands::collapse_completions(strvec({"def", "ab", "abcd", "abc"})));
+
+    EXPECT_EQ(strvec({"abc", "def", "ef"}), 
+              Commands::collapse_completions(strvec({"def", "abc", "abcd", "abc", "ef"})));
+
+    EXPECT_EQ(strvec({"abc", "de"}), 
+              Commands::collapse_completions(strvec({"def", "abc", "abcd", "abc", "de"})));
+
+    EXPECT_EQ(strvec({"abc", "de", "gi"}), 
+              Commands::collapse_completions(strvec({"def", "abc", "abcd", "abc", "de", "gi", "gig"})));
+
+}
+

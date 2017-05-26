@@ -2,6 +2,8 @@
 #include "parsed_line.h"
 #include "command.h"
 
+#include <algorithm>
+
 static void append(std::vector<std::string> &dst, const std::vector<std::string> &src)
 {
     for (const auto &s : src)
@@ -58,4 +60,44 @@ std::vector<std::string> Commands::get_possible_completions(const Parsed_line &l
         }
     }
     return completions;
+}
+
+// return the common prefix size between two strings
+static size_t prefix_size(const std::string &s1, const std::string &s2)
+{
+    size_t sz = 0;
+    while (sz < s1.size() && sz < s2.size() && s1[sz] == s2[sz]) { sz++; }
+    return sz;
+}
+
+//static 
+std::vector<std::string> Commands::collapse_completions(const std::vector<std::string> &completions)
+{
+    // the idea is to find all elements with a common prefix and collapse them into that common prefix. 
+    std::vector<std::string> sorted = completions;
+
+    // The basic idea: sort the strings and then collapse the elements together. Perhaps it is inefficient but that is ok.
+    std::sort(sorted.begin(), sorted.end()); // lexically sort
+
+    std::vector<std::string> results;
+    if (sorted.empty()) { return results; }
+
+    std::string curprefix = sorted[0];
+    for (size_t i=0; i<sorted.size(); ++i)
+    {
+        size_t common_size = prefix_size(curprefix, sorted[i]);
+        // if no common prefix, just add to the results
+        if (common_size == 0) 
+        { 
+            results.push_back(curprefix); 
+            curprefix = sorted[i];
+        }
+        // if there is a common prefix, adjust curprefix as necessary and keep going
+        else
+        {
+            curprefix = curprefix.substr(0, common_size);
+        }
+    }
+    results.push_back(curprefix);
+    return results;
 }
