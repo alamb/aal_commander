@@ -50,13 +50,13 @@ TEST(test_hints, multi_match_one_exact)
     Hints hints(Parsed_line("pwd"), strvec({"pwd", "pwd foo"}));
     EXPECT_EQ(Hints::COLOR_MAGENTA, hints.color());
     EXPECT_FALSE(hints.bold());
-    EXPECT_EQ("{, foo}", hints.hint_text());
+    EXPECT_EQ("{ foo}", hints.hint_text());
 
     // swap order of completions
     hints = Hints(Parsed_line("pwd"), strvec({"pwd foo", "pwd"}));
     EXPECT_EQ(Hints::COLOR_MAGENTA, hints.color());
     EXPECT_FALSE(hints.bold());
-    EXPECT_EQ("{, foo}", hints.hint_text()); // expect order to be ordered by shortest
+    EXPECT_EQ("{ foo}", hints.hint_text()); // expect order to be ordered by shortest
 }
 
 TEST(test_hints, multi_match_three)
@@ -64,7 +64,7 @@ TEST(test_hints, multi_match_three)
     Hints hints(Parsed_line("pwd"), strvec({"pwd", "pwd fooz", "pwd bar"}));
     EXPECT_EQ(Hints::COLOR_MAGENTA, hints.color());
     EXPECT_FALSE(hints.bold());
-    EXPECT_EQ("{, bar, fooz}", hints.hint_text());
+    EXPECT_EQ("{ bar, fooz}", hints.hint_text());
 }
 
 TEST(test_hints, multi_match_no_space)
@@ -72,5 +72,13 @@ TEST(test_hints, multi_match_no_space)
     Hints hints(Parsed_line("pwd"), strvec({"pwd", "pwdfooz", "pwdbar"}));
     EXPECT_EQ(Hints::COLOR_MAGENTA, hints.color());
     EXPECT_FALSE(hints.bold());
-    EXPECT_EQ("{,bar,fooz}", hints.hint_text());
+    EXPECT_EQ("{bar,fooz}", hints.hint_text());
+}
+
+TEST(test_hints, multi_match_no_space_partial)
+{
+    Hints hints(Parsed_line("pw"), strvec({"pwd", "pwdfooz", "pwdbar"}));
+    EXPECT_EQ(Hints::COLOR_MAGENTA, hints.color());
+    EXPECT_FALSE(hints.bold());
+    EXPECT_EQ("d{bar,fooz}", hints.hint_text());
 }

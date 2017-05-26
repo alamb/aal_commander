@@ -45,7 +45,10 @@ Hints::Hints(const Parsed_line &line, const std::vector<std::string> &completion
         std::vector<std::string> remainders;
         for (const std::string &s : completions)
         {
-            remainders.emplace_back(s.substr(common_prefix.size()));
+            if (s.size() > common_prefix.size()) 
+            {
+                remainders.emplace_back(s.substr(common_prefix.size()));
+            }
         }
         std::sort(remainders.begin(), 
                  remainders.end(), 
@@ -63,7 +66,7 @@ Hints::Hints(const Parsed_line &line, const std::vector<std::string> &completion
             ss << s;
         }
         ss << "}";
-        hint_text_ = ss.str();
+        hint_text_ = line.remove_command_and_args(common_prefix) + ss.str();
         color_ = COLOR_MAGENTA;
     }
 }
