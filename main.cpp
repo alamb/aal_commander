@@ -62,7 +62,7 @@ int main(int argc, char **argv)
      * The typed string is returned as a malloc() allocated string by
      * linenoise, so the user needs to free() it. */
     char *line;
-    while ((line = linenoise("command> ")) != NULL)
+    while ((line = linenoise("command> ")) != NULL && !g_state.exit_requested())
     {
         try
         {
@@ -76,6 +76,7 @@ int main(int argc, char **argv)
             std::cerr << "Error: " << e.what() << std::endl;
         }
         free(line);
+        if (g_state.exit_requested()) break;
     }
     return 0;
 }

@@ -21,6 +21,10 @@ public:
     // return all subdirectories of the current working directory
     std::vector<std::string> get_directories() const;
 
+    bool exit_requested() const { return exit_requested_; }
+    void set_exit_requested()   { exit_requested_ = true; }
+
 private:
+    bool exit_requested_ = false;
     std::unique_ptr<boost::filesystem::path> cwd_;
 };
