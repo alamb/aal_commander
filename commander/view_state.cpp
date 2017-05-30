@@ -8,16 +8,32 @@ View_state::View_state() :
     cwd_(std::make_unique<fs::path>(fs::current_path()))
 {}
 
+View_state::View_state(const std::string &initial_dir) :
+    cwd_(std::make_unique<fs::path>(initial_dir))
+{
+}
 
 View_state::~View_state()
 {
 }
 
-
-std::string View_state::cwd() const
+std::string View_state::pwd() const
 {
-    return cwd_->filename().string();
+    return cwd_->string();
 }
+
+void View_state::cd(const std::string &relative_path)
+{
+    auto new_path = std::make_unique<fs::path>
+        (*cwd_ / fs::path(relative_path));
+
+    if (!fs::exists(*new_path))       { throw std::runtime_error("No such directory: "     + new_path->string()); }
+    if (!fs::is_directory(*new_path)) { throw std::runtime_error("Path not directory: " + new_path->string()); }
+
+    // all checks are good, return
+    std::swap(cwd_, new_path);
+}
+
 
 std::vector<std::string> View_state::get_directories() const
 {
