@@ -4,6 +4,8 @@
 #include "commander/parsed_line.h"
 #include "commander/view_state.h"
 
+#include "commander/impl/cd_command.h"
+
 #include "test_utils.h"
 #include "dummy_command.h"
 
@@ -86,4 +88,24 @@ TEST_F(test_commands, collapse_completions_prefix)
               Commands::collapse_completions(strvec({"def", "abc", "abcd", "abc", "de", "gi", "gig"})));
 
 }
+
+// TODO: factor this into its own test file
+TEST_F(test_commands, cd_command_execute)
+{
+    // test plumbing connection
+    CD_Command cmd(state_);
+    std::vector<std::string> args;
+
+    // maybe should go to home directory?   
+    args = {};
+    EXPECT_THROW_WITH_MESSAGE(cmd.execute(args), "No argument provided");
+
+    args = {"foo"};
+    std::string foo_path = state_.pwd() + "/foo";
+    EXPECT_THROW_WITH_MESSAGE(cmd.execute(args), "No such directory: " + foo_path);
+
+    args = {"foo", "bar"};
+    EXPECT_THROW_WITH_MESSAGE(cmd.execute(args), "Too many arguments provided");
+} 
+
 

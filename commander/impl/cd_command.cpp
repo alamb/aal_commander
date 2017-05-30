@@ -24,5 +24,17 @@ std::vector<std::string> CD_Command::possible_completions(const std::vector<std:
 
 std::string CD_Command::execute(const std::vector<std::string> &args)
 {
-    throw std::runtime_error("Not yet implemented");
+    if (args.empty()) 
+    {
+        throw std::runtime_error("No argument provided");
+    }
+    else if (args.size() == 1)
+    {
+        state_.cd(args[0]);
+        return "Changed directory";
+    }
+    else 
+    {
+       throw std::runtime_error("Too many arguments provided");
+    }
 }
