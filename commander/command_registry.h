@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include "command.h"
 
 class View_state;
 class Command;

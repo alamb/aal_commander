@@ -8,6 +8,12 @@ LS_Command::LS_Command(View_state &state) :
     Command("ls", state) 
 {}
 
+LS_Command::LS_Command(const std::string &alias, View_state &state):
+    Command(alias, state)
+{
+}
+
+
 std::string LS_Command::execute(const std::vector<std::string> &args)
 {
     std::stringstream ss;
