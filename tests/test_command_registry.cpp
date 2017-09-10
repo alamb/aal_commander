@@ -25,6 +25,4 @@ TEST(test_command_registry, list)
         EXPECT_TRUE(previously_seen.count(command_id) == 0)   << "Duplicate command: " << command_id;
         previously_seen.insert(command_id);
     }
-
-
 }
