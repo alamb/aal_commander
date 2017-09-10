@@ -5,6 +5,7 @@
 #include "commander/view_state.h"
 
 #include "boost/filesystem.hpp"
+#include <sstream>
 
 namespace fs = boost::filesystem;
 
@@ -69,4 +70,52 @@ TEST(test_view_state, cwd_to_file)
                               "Path not directory: " + dir.base_directory() + "/foo/bar.txt");
     EXPECT_THROW_WITH_MESSAGE(state.cd("foo/bar.txt"),
                               "No such directory: " + dir.base_directory() + "/foo/foo/bar.txt");
+}
+
+static std::string to_string(const std::vector<std::string> &v)
+{
+    std::stringstream ss;
+    ss << "(";
+    bool first = true;
+    for (const auto &s: v)
+    {
+        if (!first) ss << ", ";
+        first = false;
+        ss << s;
+    }
+    ss << ")";
+    return ss.str();
+}
+
+
+TEST(test_view_state, get_directories)
+{
+    Test_directory dir;
+    View_state state(dir.base_directory());
+
+    dir.mkdir("foo");
+    dir.mkdir("foo/bar");
+    dir.mkdir("q");
+    dir.write_file("f1.txt", "the contents");
+    dir.write_file("foo/f2.txt", "the contents");
+
+    EXPECT_EQ("(foo, q)", to_string(state.get_directories()));
+    state.cd("foo");
+    EXPECT_EQ("(bar)", to_string(state.get_directories()));
+}
+
+TEST(test_view_state, get_directory_listing)
+{
+    Test_directory dir;
+    View_state state(dir.base_directory());
+
+    dir.mkdir("foo");
+    dir.mkdir("foo/bar");
+    dir.mkdir("q");
+    dir.write_file("f1.txt", "the contents");
+    dir.write_file("foo/f2.txt", "the contents");
+
+    EXPECT_EQ("((f) f1.txt, (d) foo, (d) q)", to_string(state.get_directory_listing()));
+    state.cd("foo");
+    EXPECT_EQ("((f) f2.txt, (d) bar)", to_string(state.get_directory_listing()));
 }
