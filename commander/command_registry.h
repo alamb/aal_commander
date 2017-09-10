@@ -7,6 +7,9 @@
 class View_state;
 class Command;
 
+/**
+ * Encapsulates all available commands in commander
+ */
 class Command_registry
 {
 public:

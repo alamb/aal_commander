@@ -2,8 +2,8 @@
 #include "commander/view_state.h"
 #include <stdexcept>
 
-CD_Command::CD_Command(View_state &state) : 
-    Command("cd", state) 
+CD_Command::CD_Command(View_state &state) :
+    Command("cd", state)
 {}
 
 std::vector<std::string> CD_Command::possible_completions(const std::vector<std::string> &args_so_far)
@@ -24,16 +24,16 @@ std::vector<std::string> CD_Command::possible_completions(const std::vector<std:
 
 std::string CD_Command::execute(const std::vector<std::string> &args)
 {
-    if (args.empty()) 
+    if (args.empty())
     {
         throw std::runtime_error("No argument provided");
     }
     else if (args.size() == 1)
     {
         state_.cd(args[0]);
-        return "Changed directory";
+        return "Changed directory to " + args[0];
     }
-    else 
+    else
     {
        throw std::runtime_error("Too many arguments provided");
     }

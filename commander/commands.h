@@ -10,7 +10,7 @@ class Parsed_line;
 class Command;
 
 /**
- * Encapsulates auto complete behavior based on a list of commands.
+ * Encapsulates the list of auto complete behavior based on a list of commands.
  */
 class Commands
 {
@@ -29,7 +29,7 @@ public:
   std::vector<std::string> get_possible_completions(const Parsed_line &line);
   std::vector<std::string> get_collapsed_completions(const Parsed_line &line)
   { return collapse_completions(get_possible_completions(line)); }
-  
+
 
   // If multiple completions share a prefix, collapse them into the shared prefix
   static std::vector<std::string> collapse_completions(const std::vector<std::string> &completions);
@@ -37,4 +37,3 @@ public:
 private:
   std::vector<std::unique_ptr<Command>> commands_;
 };
-

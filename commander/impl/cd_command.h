@@ -2,6 +2,9 @@
 
 #include "../command.h"
 
+/**
+ * Change working directories.
+ **/
 class CD_Command : public Command
 {
 public:
