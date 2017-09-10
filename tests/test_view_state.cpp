@@ -25,9 +25,33 @@ TEST(test_view_state, cwd)
     dir.mkdir("foo");
     EXPECT_NO_THROW(state.cd("foo"));
 
-    fs::path actual_dir = fs::path(dir.base_directory()) / fs::path("foo");
+    fs::path actual_dir = dir.base_path() / "foo";
     EXPECT_EQ(actual_dir.string(), state.pwd());
 }
+
+TEST(test_view_state, cwd_to_dot)
+{
+    Test_directory dir;
+    View_state state(dir.base_directory());
+
+    dir.mkdir("foo");
+    dir.mkdir("foo/bar");
+
+    fs::path foo_dir = dir.base_path() / "foo";
+    fs::path bar_dir = foo_dir / "bar";
+
+    state.cd("foo");
+    EXPECT_EQ(foo_dir.string(), state.pwd());
+    state.cd("bar");
+    EXPECT_EQ(bar_dir.string(), state.pwd());
+    state.cd(".");
+    EXPECT_EQ(bar_dir.string(), state.pwd());
+    state.cd("..");
+    EXPECT_EQ(foo_dir.string(), state.pwd());
+    state.cd("..");
+    EXPECT_EQ(dir.base_path().string(), state.pwd());
+}
+
 
 TEST(test_view_state, cwd_to_file)
 {
@@ -38,7 +62,7 @@ TEST(test_view_state, cwd_to_file)
     dir.mkdir("foo");
     dir.write_file("foo/bar.txt", "the contents");
     EXPECT_TRUE(fs::exists(dir.base_directory() / fs::path("foo/bar.txt")));
-    EXPECT_TRUE(fs::is_regular_file(dir.base_directory() / fs::path("foo/bar.txt")));
+    EXPECT_TRUE(fs::is_regular_file(dir.base_path() / fs::path("foo/bar.txt")));
 
     state.cd("foo");
     EXPECT_THROW_WITH_MESSAGE(state.cd("bar.txt"),

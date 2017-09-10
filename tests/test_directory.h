@@ -14,7 +14,9 @@ public:
 
     // Returns the base directory on the file system
     std::string base_directory() const;
+    const boost::filesystem::path &base_path() const { return *temp_dir_; }
 
+    // create a directory relative to the temp_dir_
     void mkdir(const std::string &relative_path);
 
     // also makes any necessary directories and writes content to

@@ -24,13 +24,15 @@ std::string View_state::pwd() const
 
 void View_state::cd(const std::string &relative_path)
 {
-    auto new_path = std::make_unique<fs::path>
-        (*cwd_ / fs::path(relative_path));
+    auto new_path = std::make_unique<fs::path>(*cwd_ / fs::path(relative_path));
 
     if (!fs::exists(*new_path))
     { throw std::runtime_error("No such directory: "  + new_path->string()); }
     if (!fs::is_directory(*new_path))
     { throw std::runtime_error("Path not directory: " + new_path->string()); }
+
+    // interpret all . and .. paths
+    new_path = std::make_unique<fs::path>(fs::canonical(*new_path));
 
     // all checks are good, return
     std::swap(cwd_, new_path);
