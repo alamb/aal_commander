@@ -24,17 +24,20 @@ std::vector<std::string> CD_Command::possible_completions(const std::vector<std:
 
 std::string CD_Command::execute(const std::vector<std::string> &args)
 {
-    if (args.empty())
+    auto num_args = args.size();
+
+    if (num_args == 0)
     {
         throw std::runtime_error("No argument provided");
     }
-    else if (args.size() == 1)
+    else if (num_args == 1)
     {
         state_.cd(args[0]);
         return "Changed directory to " + args[0];
     }
     else
     {
-       throw std::runtime_error("Too many arguments provided");
+        throw std::runtime_error(command_id() + " requires 0 or 1 argument. " +
+                                 std::to_string(num_args) + " provided.");
     }
 }

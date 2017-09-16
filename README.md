@@ -6,11 +6,12 @@ Features:
   Tests
   Autocomplete via the linenoise library
 
-To build (the `.. .` is important):
+To build
 
 ```
 mkdir build
-( cd build && cmake .. . )
+cmake . build
+cd build
 make
 ```
 

@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include <string>
+#include <vector>
 
 typedef std::vector<std::string> strvec;
 
@@ -12,3 +13,4 @@ try { (__statement);\
     EXPECT_EQ(std::string(__message), std::string(e.what())) << "unexpected message on thrown exception.";\
 }
 
+std::string to_string(const std::vector<std::string> &v);

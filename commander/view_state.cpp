@@ -24,18 +24,19 @@ std::string View_state::pwd() const
 
 void View_state::cd(const std::string &relative_path)
 {
-    auto new_path = std::make_unique<fs::path>(*cwd_ / fs::path(relative_path));
+    auto new_path = *cwd_ / fs::path(relative_path);
 
-    if (!fs::exists(*new_path))
-    { throw std::runtime_error("No such directory: "  + new_path->string()); }
-    if (!fs::is_directory(*new_path))
-    { throw std::runtime_error("Path not directory: " + new_path->string()); }
+    if (!fs::exists(new_path))
+    { throw std::runtime_error("No such directory: "  + new_path.string()); }
+    if (!fs::is_directory(new_path))
+    { throw std::runtime_error("Path not directory: " + new_path.string()); }
 
     // interpret all . and .. paths
-    new_path = std::make_unique<fs::path>(fs::canonical(*new_path));
+    new_path = fs::canonical(new_path);
 
-    // all checks are good, return
-    std::swap(cwd_, new_path);
+    // all checks are good, make the change
+    auto new_cwd = std::make_unique<fs::path>(new_path);
+    std::swap(cwd_, new_cwd);
 }
 
 
@@ -50,19 +51,34 @@ std::vector<std::string> View_state::get_directories() const
             dirs.push_back(ent.filename().string());
         }
     }
+    dirs.push_back("..");
     return dirs;
 }
 
-std::vector<std::string> View_state::get_directory_listing() const
+static inline std::string to_formatted_string(const fs::path &p)
 {
-    std::vector<std::string> ret;
-    for (fs::directory_iterator itr(*cwd_); itr != fs::directory_iterator(); ++itr)
+    std::string d_string = fs::is_directory(p) ? "(d) " : "(f) ";
+    return d_string + p.filename().string();
+}
+
+
+std::vector<std::string> View_state::get_directory_listing(const std::string &dir) const
+{
+    fs::path dir_path = *cwd_ / fs::path(dir);
+    if (!fs::exists(dir_path))
     {
-        fs::path ent = itr->path();
-        std::string d_string = fs::is_directory(ent) ? "(d) " : "(f) ";
-        {
-            ret.push_back(d_string + ent.filename().string());
-        }
+        throw std::runtime_error("Unknown file or path: "  + dir_path.string());
+    }
+
+    if (!fs::is_directory(dir_path))
+    {
+        return { to_formatted_string(dir_path) };
+    }
+
+    std::vector<std::string> ret;
+    for (fs::directory_iterator itr(dir_path); itr != fs::directory_iterator(); ++itr)
+    {
+        ret.push_back(to_formatted_string(itr->path()));
     }
     return ret;
 

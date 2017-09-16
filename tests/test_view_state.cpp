@@ -72,22 +72,6 @@ TEST(test_view_state, cwd_to_file)
                               "No such directory: " + dir.base_directory() + "/foo/foo/bar.txt");
 }
 
-static std::string to_string(const std::vector<std::string> &v)
-{
-    std::stringstream ss;
-    ss << "(";
-    bool first = true;
-    for (const auto &s: v)
-    {
-        if (!first) ss << ", ";
-        first = false;
-        ss << s;
-    }
-    ss << ")";
-    return ss.str();
-}
-
-
 TEST(test_view_state, get_directories)
 {
     Test_directory dir;
@@ -99,9 +83,9 @@ TEST(test_view_state, get_directories)
     dir.write_file("f1.txt", "the contents");
     dir.write_file("foo/f2.txt", "the contents");
 
-    EXPECT_EQ("(foo, q)", to_string(state.get_directories()));
+    EXPECT_EQ("(foo, q, ..)", to_string(state.get_directories()));
     state.cd("foo");
-    EXPECT_EQ("(bar)", to_string(state.get_directories()));
+    EXPECT_EQ("(bar, ..)", to_string(state.get_directories()));
 }
 
 TEST(test_view_state, get_directory_listing)
@@ -115,7 +99,13 @@ TEST(test_view_state, get_directory_listing)
     dir.write_file("f1.txt", "the contents");
     dir.write_file("foo/f2.txt", "the contents");
 
-    EXPECT_EQ("((f) f1.txt, (d) foo, (d) q)", to_string(state.get_directory_listing()));
+    EXPECT_EQ("((f) f1.txt, (d) foo, (d) q)", to_string(state.get_directory_listing(".")));
+    EXPECT_EQ("((f) f2.txt, (d) bar)", to_string(state.get_directory_listing("foo")));
+    EXPECT_EQ("((f) f1.txt)", to_string(state.get_directory_listing("f1.txt")));
+
+    std::string err_msg = "Unknown file or path: " + dir.base_directory() + "/non_existent";
+    EXPECT_THROW_WITH_MESSAGE(state.get_directory_listing("non_existent"), err_msg);
+
     state.cd("foo");
-    EXPECT_EQ("((f) f2.txt, (d) bar)", to_string(state.get_directory_listing()));
+    EXPECT_EQ("((f) f2.txt, (d) bar)", to_string(state.get_directory_listing(".")));
 }

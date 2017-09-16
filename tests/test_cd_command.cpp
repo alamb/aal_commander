@@ -5,8 +5,7 @@
 #include "commander/impl/cd_command.h"
 
 
-// TODO: factor this into its own test file
-TEST(test_cd_command, cd_command_execute)
+TEST(test_cd_command, execute)
 {
     // test plumbing connection
     View_state state;
@@ -22,5 +21,5 @@ TEST(test_cd_command, cd_command_execute)
     EXPECT_THROW_WITH_MESSAGE(cmd.execute(args), "No such directory: " + foo_path);
 
     args = {"foo", "bar"};
-    EXPECT_THROW_WITH_MESSAGE(cmd.execute(args), "Too many arguments provided");
+    EXPECT_THROW_WITH_MESSAGE(cmd.execute(args), "cd requires 0 or 1 argument. 2 provided.");
 }
